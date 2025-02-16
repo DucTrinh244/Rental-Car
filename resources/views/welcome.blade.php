@@ -9,7 +9,7 @@
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
     <title>RENAX</title>
-    <link rel="shortcut icon" href="img/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{asset('public/FrontEnd/img/favicon.png')}}" />
     <!-- <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;display=swap"
