@@ -17,11 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone_number')->unique();
-            $table->string('address')->unique();
-            $table->string('image_url')->unique();
+            $table->string('phone_number')->nullable();
+            $table->string('address')->nullable();
+            $table->string('image_url')->nullable();
+            $table->string('url_facebook')->nullable();
+            $table->string('url_youtube')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('logo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

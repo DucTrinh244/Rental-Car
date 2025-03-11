@@ -77,7 +77,7 @@
                 data-bs-toggle="dropdown"
                 data-bs-auto-close="outside"
                 aria-expanded="false"
-                >Home <i class="ti-angle-down"></i
+                >Dashboard <i class="ti-angle-down"></i
               ></a>
               <ul class="dropdown-menu">
                 <li>

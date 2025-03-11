@@ -24,7 +24,7 @@ return new class extends Migration
             $table->date('return_date')->nullable(); // Ngày về (có thể null nếu đi 1 chiều)
             $table->text('requirements')->nullable(); // Nhu cầu khách hàng
             $table->text('notes')->nullable(); // Ghi chú
-            $table->enum('status', ['pending', 'confirmed', 'canceled'])->default('pending'); // Trạng thái đơn đặt xe
+            $table->enum('status', ['pending', 'confirmed', 'success', 'canceled'])->default('pending'); // Trạng thái đơn đặt xe
             $table->timestamps(); // Tạo cột created_at và updated_at
         });
     }

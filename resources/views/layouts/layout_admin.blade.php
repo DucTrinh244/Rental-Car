@@ -10,7 +10,11 @@
     <meta name="author" content="Techzaa" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="shortcut icon" href="{{ asset('public/BackEnd/images/favicon.ico') }}">
+    @php
+        $image_favicon = App\Models\Images::where('page_name', 'favicon')->first();
+    @endphp
+    <link rel="shortcut icon"
+        href="{{ $image_favicon ? asset($image_favicon->image_path) : asset('public/FrontEnd/img/favicon.png') }}" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css">
@@ -55,7 +59,7 @@
                             </button>
                         </div>
 
-                       
+
                         <!-- Theme Setting -->
                         <div class="topbar-item d-none d-md-flex">
                             <button type="button" class="topbar-button" id="theme-settings-btn"
@@ -66,37 +70,39 @@
                             </button>
                         </div>
 
-                      
+
+
 
                         <!-- User -->
                         <div class="dropdown topbar-item">
                             <a type="button" class="topbar-button" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="d-flex align-items-center">
+                                    <?php
+                                    if (Auth::user()->image_url == null) {
+                                        Auth::user()->image_url = 'public/BackEnd/images/users/avatar-1.jpg';
+                                    }
+                                    ?>
                                     <img class="rounded-circle" width="32"
-                                        src="{{ asset('public/uploads/profile/admin_profile.png') }}" alt="avatar-3">
+                                        src="{{ asset(Auth::user()->image_url) }}" alt="avatar-3">
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
                                 <h6 class="dropdown-header">Xin chào</h6>
-                                <a class="dropdown-item" href="{{ URL::to('admin/profile-admin') }}">
+                                <a class="dropdown-item" href="{{ URL::to('/show-account') }}">
                                     <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i><span
                                         class="align-middle">Thông tin cá nhân</span>
                                 </a>
                                 <div class="dropdown-divider my-1"></div>
 
-                                {{-- <form method="POST" action="{{ route('admin.logout') }}">
+                                <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button class="dropdown-item text-danger" type="submit">
                                         <i class="bx bx-log-out fs-18 align-middle me-1"></i>
                                         <span class="align-middle">Đăng xuất</span>
                                     </button>
-                                </form> --}}
-                                <button class="dropdown-item text-danger" type="submit">
-                                    <i class="bx bx-log-out fs-18 align-middle me-1"></i>
-                                    <span class="align-middle">Đăng xuất</span>
-                                </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -231,14 +237,14 @@
         <div class="main-nav">
             <!-- Sidebar Logo -->
             <div class="logo-box">
-                <a href="{{ URL::to('/trang-chu') }}" class="logo-dark">
-                    <img src="{{ asset('public/BackEnd/images/logo-sm.png') }}" class="logo-sm" alt="logo sm">
-                    <img src="{{ asset('public/BackEnd/images/logo-dark.png') }}" class="logo-lg" alt="logo dark">
+                <a href="{{ URL::to('/dashboard') }}" class="logo-dark">
+                    <img src="{{ asset('public/BackEnd/images/logo-sm.png') }}" class="logo-sm" alt="">
+                    <img src="{{ asset('public/BackEnd/images/logo-dark.png') }}" class="logo-lg" alt="">
                 </a>
 
-                <a href="{{ URL::to('/trang-chu') }}" class="logo-light">
-                    <img src="{{ asset('public/BackEnd/images/logo-sm.png') }}" class="logo-sm" alt="logo sm">
-                    <img src="{{ asset('public/BackEnd/images/logo-light.png') }}" class="logo-lg" alt="logo light">
+                <a href="{{ URL::to('/dashboard') }}" class="logo-light">
+                    <img src="{{ asset('public/BackEnd/images/logo-sm.png') }}" class="logo-sm" alt="">
+                    <img src="{{ asset('public/BackEnd/images/logo-light.png') }}" class="logo-lg" alt="">
                 </a>
             </div>
 
@@ -261,84 +267,81 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-arrow" href="#sideBarBookCar" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sideBarBookCar">
-                             <span class="nav-icon">
-                                  <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
-                             </span>
-                             <span class="nav-text"> Đặt xe </span>
+                        <a class="nav-link menu-arrow" href="#sideBarBookCar" data-bs-toggle="collapse"
+                            role="button" aria-expanded="false" aria-controls="sideBarBookCar">
+                            <span class="nav-icon">
+                                <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
+                            </span>
+                            <span class="nav-text"> Đặt xe </span>
                         </a>
                         <div class="collapse" id="sideBarBookCar">
-                             <ul class="nav sub-navbar-nav">
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="category-list.html">Quản lý đặt xe</a>
-                                  </li>                         
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="category-edit.html">Danh sách khách hàng</a>
-                                  </li>
-                             </ul>
+                            <ul class="nav sub-navbar-nav">
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ URL::to('all-bookings') }}">Quản lý đặt xe</a>
+                                </li>
+
+                            </ul>
                         </div>
-                   </li>
+                    </li>
 
                     <li class="nav-item">
-                        <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProducts">
-                             <span class="nav-icon">
-                                  <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
-                             </span>
-                             <span class="nav-text"> Cá nhân </span>
+                        <a class="nav-link menu-arrow" href="#sidebarProducts" data-bs-toggle="collapse"
+                            role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                            <span class="nav-icon">
+                                <iconify-icon icon="solar:t-shirt-bold-duotone"></iconify-icon>
+                            </span>
+                            <span class="nav-text"> Cá nhân </span>
                         </a>
                         <div class="collapse" id="sidebarProducts">
-                             <ul class="nav sub-navbar-nav">
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="product-list.html">Thông tin cá nhân</a>
-                                  </li>
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="product-grid.html"></a>
-                                  </li>
-                             </ul>
+                            <ul class="nav sub-navbar-nav">
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ URL::to('/show-account') }}">Thông tin hiển
+                                        thị</a>
+                                </li>
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="product-grid.html"></a>
+                                </li>
+                            </ul>
                         </div>
-                   </li>
+                    </li>
 
-                   <li class="nav-item">
-                        <a class="nav-link menu-arrow" href="#sidebarServices" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarServices">
-                             <span class="nav-icon">
-                                  <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
-                             </span>
-                             <span class="nav-text"> Dịch vụ </span>
+                    <li class="nav-item">
+                        <a class="nav-link menu-arrow" href="#sidebarServices" data-bs-toggle="collapse"
+                            role="button" aria-expanded="false" aria-controls="sidebarServices">
+                            <span class="nav-icon">
+                                <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
+                            </span>
+                            <span class="nav-text"> Dịch vụ </span>
                         </a>
                         <div class="collapse" id="sidebarServices">
-                             <ul class="nav sub-navbar-nav">
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="{{ route('services') }}">Quản lý dịch vụ</a>
-                                  </li>                         
-                                  <li class="sub-nav-item">
-                                       <a class="sub-nav-link" href="{{ route('services.add') }}">Thêm dịch vụ</a>
-                                  </li>
-                             </ul>
+                            <ul class="nav sub-navbar-nav">
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ route('services') }}">Quản lý dịch vụ</a>
+                                </li>
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ route('services.add') }}">Thêm dịch vụ</a>
+                                </li>
+                            </ul>
                         </div>
-                   </li>
-                   <li class="nav-item">
-                    <a class="nav-link menu-arrow" href="#sideBarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sideBarPages">
-                         <span class="nav-icon">
-                              <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
-                         </span>
-                         <span class="nav-text"> Quản lý trang</span>
-                    </a>
-                    <div class="collapse" id="sideBarPages">
-                         <ul class="nav sub-navbar-nav">
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="category-list.html">Video hiển thị</a>
-                              </li>                         
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="category-list.html">Hình ảnh hiển thị</a>
-                              </li>                         
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="category-edit.html">Thông tin hiển thị</a>
-                              </li>
-                              <li class="sub-nav-item">
-                                   <a class="sub-nav-link" href="category-edit.html">Đánh giá khách hàng</a>
-                              </li>
-                         </ul>
-                    </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-arrow" href="#sideBarPages" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sideBarPages">
+                            <span class="nav-icon">
+                                <iconify-icon icon="solar:clipboard-list-bold-duotone"></iconify-icon>
+                            </span>
+                            <span class="nav-text"> Quản lý hiển thị </span>
+                        </a>
+                        <div class="collapse" id="sideBarPages">
+                            <ul class="nav sub-navbar-nav">
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ URL::to('show-review') }}">Đánh giá hiển thị</a>
+                                </li>
+                                <li class="sub-nav-item">
+                                    <a class="sub-nav-link" href="{{ URL::to('show-images') }}">Hình ảnh hiển thị</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                 </ul>
@@ -366,8 +369,34 @@
     <script src="{{ asset('public/BackEnd/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('public/BackEnd/js/components/extended-sweetalert.js') }}"></script>
     <script src="{{ asset('public/BackEnd/js/components/form-quilljs.js ') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('scripts')
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".delete-form").forEach(function(button) {
+                button.addEventListener("click", function() {
+                    let url = this.getAttribute("data-url");
+
+                    Swal.fire({
+                        title: "Bạn có chắc chắn?",
+                        text: "Bạn có muốn xóa cái này không?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Có, xóa ngay!",
+                        cancelButtonText: "Không"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
 </body>
 

@@ -13,10 +13,30 @@
                     <h2 class="text-center text-primary">THÊM DỊCH VỤ</h2>
                 </div>
 
-                <form action="{{ URL::to('add-service-action') }}" method="post">
+                <form action="{{ URL::to('add-service-action') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="col-xl-12 col-lg-12">
                         <form action="">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Chọn ảnh cho dịch vụ</h4>
+                                </div>
+                                <div class="card-body">
+                                    <!-- File Upload -->
+
+                                    <div class="fallback">
+                                        <label for="myFileInput" class="form-label">Chọn ảnh (yêu cầu: 400x400)</label>
+                                        <input name="category_image" class="form-control btn btn-primary" type="file"
+                                            accept="image/*" id="myFileInput" onchange="previewImage(event)" />
+
+                                    </div>
+                                    <div class="mt-3">
+                                        <img id="imagePreview" src="#" alt="Image Preview"
+                                            style="display:none; max-width: 300px;" />
+                                    </div>
+
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Thông tin tổng quan</h4>
